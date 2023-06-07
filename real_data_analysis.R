@@ -1,7 +1,8 @@
 ########################################################################################################################
-### validate the performance of different normalization methods on binary phenotype prediction in CRC datasets
-### 8 available CRC dataset: "FengQ_2015","GuptaA_2019","ThomasAM_2018","VogtmannE_2016",
-#                            "WirbelJ_2018","YachidaS_2019","YuJ_2015","ZellerG_2014"
+### validate the performance of different normalization methods on binary phenotype prediction in CRC/IBD datasets
+### 8 available CRC datasets: "FengQ_2015","GuptaA_2019","ThomasAM_2018","VogtmannE_2016",
+#                             "WirbelJ_2018","YachidaS_2019","YuJ_2015","ZellerG_2014"
+### 5 available IBD datasets: "HallAB_2017","HMP_2019_ibdmdb","IjazUZ_2017","VilaAV_2018","NielsenHB_2014"
 ### repeat 30 times
 ### 2023/06/05
 ########################################################################################################################
