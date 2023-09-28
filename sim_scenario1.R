@@ -115,6 +115,7 @@ for(alpha in population_effects){
     print(paste0("alpha=",alpha,",disease_effect=",disease_effect))
   }
 }
+# After generating simulation data, comment out the simulation part so that data will not be generated repeatedly.
 
 
 #======================================================================================================================#
