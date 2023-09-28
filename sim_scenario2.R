@@ -10,7 +10,7 @@
 ########################################################################################################################
 
 ### set working directory
-setwd("/home/wangbb/normalization/simulations/")
+setwd("/home/wangbb/normalization_comparison")
 
 ### packages
 all(sapply(c("DirichletReg","MCMCpack","caret","pROC"), require, character.only=TRUE))
@@ -138,6 +138,7 @@ sim.batch.func <- function(count_table,hyper_pars,seed){
 #======================================================================================================================#
 ### simulation ###
 #======================================================================================================================#
+if(!dir.exists("scenario2")) dir.create("scenario2")
 if(!dir.exists("scenario2/sim_data")) dir.create("scenario2/sim_data")
 # simulate the count table
 for(disease_effect in disease_effects){
