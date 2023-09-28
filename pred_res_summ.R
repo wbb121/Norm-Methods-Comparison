@@ -25,7 +25,7 @@ norm_methods$annotated_method <- factor(norm_methods$annotated_method,
                                                  "LOG","AST","STD","Rank","Blom","NPN","logCPM","VST",
                                                  "QN","FSQN","BMC","Limma","ComBat","ConQuR"))
 norm_methods$class <- factor(norm_methods$class,levels=c("Scaling","CoDA","Transformation","Batch Correction"))
-saveRDS(norm_methods,"res_summ/norm_methods.rds")
+saveRDS(norm_methods,"data/norm_methods.rds")
 
 
 #=====================================================================================================================#
@@ -52,8 +52,8 @@ for(alpha in population_effects){
     }
   }
 }
-saveRDS(scenario1_df,"res_summ/scenario1_res.rds")
-saveRDS(scenario1_summ_df,"res_summ/scenario1_res_summ.rds")
+saveRDS(scenario1_df,"data/scenario1_res.rds")
+saveRDS(scenario1_summ_df,"data/scenario1_res_summ.rds")
 
 
 #=====================================================================================================================#
@@ -82,8 +82,8 @@ for(i in 1:length(parameters)){
     }
   }
 }
-saveRDS(scenario2_df,"res_summ/scenario2_res.rds")
-saveRDS(scenario2_summ_df,"res_summ/scenario2_res_summ.rds")
+saveRDS(scenario2_df,"data/scenario2_res.rds")
+saveRDS(scenario2_summ_df,"data/scenario2_res_summ.rds")
 
 
 #=====================================================================================================================#
@@ -109,8 +109,8 @@ for(overlap in overlaps){
     }
   }
 }
-saveRDS(scenario3_df,"res_summ/scenario3_res.rds")
-saveRDS(scenario3_summ_df,"res_summ/scenario3_res_summ.rds")
+saveRDS(scenario3_df,"data/scenario3_res.rds")
+saveRDS(scenario3_summ_df,"data/scenario3_res_summ.rds")
 
 
 #=====================================================================================================================#
