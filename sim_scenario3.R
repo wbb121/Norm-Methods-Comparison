@@ -5,15 +5,12 @@
 ########################################################################################################################
 
 ### set working directory
-#setwd("E:/USC/normalization/20230908_simulations/")
-#setwd("/Users/beibeiwang/Desktop/Normalization/20230908_simulations/")
-#setwd("/home/wangbb_gpu/normalization/20230908_simulations/")
-setwd("/home/wangbb/normalization/20230908_simulations/")
+setwd("/home/wangbb/normalization_comparison")
 
 ### packages
-suppressPackageStartupMessages(library(DirichletReg))
-suppressPackageStartupMessages(library(caret))
-suppressPackageStartupMessages(library(pROC))
+all(sapply(c("DirichletReg","caret","pROC"), require, character.only=TRUE))
+
+### load the helper function
 source("helper.R")
 
 
@@ -21,7 +18,6 @@ source("helper.R")
 ### arguments ###
 #======================================================================================================================#
 command_args=commandArgs(trailingOnly=T)
-#command_args=c(100,1000000,10,"data/GuptaA_2019_ctrl_count.rds","data/FengQ_2015_ctrl_count.rds","TSS","rfr")
 #command_args=c(100,1000000,10,"data/FengQ_2015_ctrl_count.rds","TSS","rfr")
 
 # parameters
@@ -31,21 +27,13 @@ sample_size=as.numeric(command_args[1])     # sample size
 library_size=as.numeric(command_args[2])    # library size
 num_genes=as.numeric(command_args[3])       # number of phenotype related gene 
 count=readRDS(command_args[4])              # template data
-#count1=readRDS(command_args[4])             # template data1
-#count2=readRDS(command_args[5])             # template data2
 norm_method=command_args[5]                 # normalization method
 pred_method=command_args[6]                 # prediction method
 
 # make the names for genes in two populations
-#rownames(count1) <- make.names(rownames(count1))
-#rownames(count2) <- make.names(rownames(count2))
 rownames(count) <- make.names(rownames(count))
 
 # choose phenotype related gene
-#inter_genes <- intersect(rownames(count1),rownames(count2))
-#set.seed(1234); selected_genes <- sample(inter_genes,num_genes,replace=F)
-#diff_genes <- rownames(count2)[!rownames(count2)%in%inter_genes]
-#set.seed(1234); extra_genes <- sample(diff_genes,num_genes-2,replace=F)
 set.seed(1234); selected_genes <- sample(rownames(count),num_genes,replace=F)
 set.seed(1234); extra_genes <- sample(rownames(count)[!rownames(count)%in%selected_genes],num_genes,replace=F)
 selected_genes_df <- as.data.frame(matrix(NA,nrow=length(num_genes_overlap),ncol=num_genes,
@@ -111,21 +99,22 @@ sim.count.func <- function(count,sample_size,library_size,selected_genes1,select
 #======================================================================================================================#
 ### simulation ###
 #======================================================================================================================#
-#if(!dir.exists("scenario3/sim_data")) dir.create("scenario3/sim_data")
-## simulate the count table
-#for(disease_effect in disease_effects){
-#  for(j in 1:length(num_genes_overlap)){
-#    sim_tabs <- list()
-#    for(i in 1:100){
-#      sim_tabs[[i]] <- sim.count.func(count=count,sample_size=sample_size,library_size=library_size,
-#                                      selected_genes1=selected_genes,
-#                                      selected_genes2=as.character(selected_genes_df[j,]),
-#                                      disease_effect=disease_effect,seed=i)
-#    }
-#    saveRDS(sim_tabs,paste0("scenario3/sim_data/sim_ep",disease_effect,"_overlap",num_genes_overlap[j],".rds"))
-#    print(paste0("disease_effect=",disease_effect,",overlap_genes=",num_genes_overlap[j]))
-#  }
-#}
+if(!dir.exists("scenario3")) dir.create("scenario3")
+if(!dir.exists("scenario3/sim_data")) dir.create("scenario3/sim_data")
+# simulate the count table
+for(disease_effect in disease_effects){
+  for(j in 1:length(num_genes_overlap)){
+    sim_tabs <- list()
+    for(i in 1:100){
+      sim_tabs[[i]] <- sim.count.func(count=count,sample_size=sample_size,library_size=library_size,
+                                      selected_genes1=selected_genes,
+                                      selected_genes2=as.character(selected_genes_df[j,]),
+                                      disease_effect=disease_effect,seed=i)
+    }
+    saveRDS(sim_tabs,paste0("scenario3/sim_data/sim_ep",disease_effect,"_overlap",num_genes_overlap[j],".rds"))
+    print(paste0("disease_effect=",disease_effect,",overlap_genes=",num_genes_overlap[j]))
+  }
+}
 
 
 #======================================================================================================================#
@@ -168,10 +157,4 @@ for(disease_effect in disease_effects){
 
 
 
-#sim_tabs[[1]] <- sim.count.func(count=count,sample_size=sample_size,library_size=library_size,
-#                                selected_genes1=selected_genes,
-#                                selected_genes2=as.character(selected_genes_df[j,]),
-#                                disease_effect=disease_effect,seed=i)
-#norm_tabs[[1]] <-  norm.func(p1=sim1,p2=sim2,norm_method=norm_method)
-#sim.pred.func(trn=norm_tabs[[1]][[1]],tst=norm_tabs[[1]][[2]],pred_method=pred_method)
 
