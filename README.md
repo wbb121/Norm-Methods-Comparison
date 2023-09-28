@@ -4,7 +4,7 @@ This repository contains R scripts for running the analysis described in our man
 
 ### [helper.R](https://github.com/wbb121/Norm-Methods-Comparison/blob/main/helper.R):
 
-Including functions to merge count tables, obtain count tables from curatedMetagenomicData, perform PERMANOVA analysis, and normalize the data.
+Including functions to merge count tables, obtain count tables from curatedMetagenomicData, perform PERMANOVA analysis, normalize the data, predict disease status in simulated data, and predict disease status in real data.
 
 ### [real_data_obtain.R](https://github.com/wbb121/Norm-Methods-Comparison/blob/main/real_data_obtain.R):
 
