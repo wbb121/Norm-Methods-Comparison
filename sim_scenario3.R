@@ -115,6 +115,7 @@ for(disease_effect in disease_effects){
     print(paste0("disease_effect=",disease_effect,",overlap_genes=",num_genes_overlap[j]))
   }
 }
+# After generating simulation data, comment out the simulation part so that data will not be generated repeatedly.
 
 
 #======================================================================================================================#
