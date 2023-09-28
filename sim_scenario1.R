@@ -8,7 +8,7 @@
 ### 2023/09/28
 ########################################################################################################################
 
-setwd("/home/wangbb/normalization/simulations/")
+setwd("/home/wangbb/normalization_comparison")
 
 ### packages
 all(sapply(c("DirichletReg","caret","pROC"), require, character.only=TRUE))
@@ -102,6 +102,7 @@ sim.count.func <- function(count1,count2,sample_size,library_size,alpha,disease_
 #======================================================================================================================#
 ### simulation ###
 #======================================================================================================================#
+if(!dir.exists("scenario1")) dir.create("scenario1")
 if(!dir.exists("scenario1/sim_data")) dir.create("scenario1/sim_data")
 for(alpha in population_effects){
   for(disease_effect in disease_effects){
