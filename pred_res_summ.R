@@ -7,76 +7,110 @@ setwd("/home/wangbb/normalization_comparison")
 
 library(reshape2)
 
-
 #=====================================================================================================================#
-### information for normalization methods ###
+### normalization methods ###
 #=====================================================================================================================#
+### normalization methods 
 norm_methods <- data.frame(
-  norm_method=c("TSS","UQ","MED","CSS","TMM","RLE_poscounts","GMPR","CLR",
-                "LOG","AST","STD","rank","blom","NPN","logcpm","VST",
+  norm_method=c("TSS","UQ","MED","CSS","TMM","RLE_poscounts","GMPR","CLR+",
+                "logcpm","LOG","AST","STD","rank","blom","VST","NPN",
                 "QN","FSQN","BMC","limma","combat","conqur"),
   annotated_method=c("TSS","UQ","MED","CSS","TMM","RLE","GMPR","CLR",
-                     "LOG","AST","STD","Rank","Blom","NPN","logCPM","VST",
+                     "logCPM","LOG","AST","STD","Rank","Blom","VST","NPN",
                      "QN","FSQN","BMC","Limma","ComBat","ConQuR"),
   class=c(rep("Scaling",7),rep("CoDA",1),rep("Transformation",8),rep("Batch Correction",6))
 )
-norm_methods$annotated_method <- factor(norm_methods$annotated_method,levels=norm_methods$annotated_method)
+norm_methods$annotated_method <- factor(norm_methods$annotated_method,
+                                        levels=c("TSS","UQ","MED","CSS","TMM","RLE","GMPR","CLR",
+                                                 "LOG","AST","STD","Rank","Blom","NPN","logCPM","VST",
+                                                 "QN","FSQN","BMC","Limma","ComBat","ConQuR"))
 norm_methods$class <- factor(norm_methods$class,levels=c("Scaling","CoDA","Transformation","Batch Correction"))
-saveRDS(norm_methods,"data/norm_methods.rds")
+saveRDS(norm_methods,"res_summ/norm_methods.rds")
 
 
 #=====================================================================================================================#
-### prediction results for simulated data ###
+### simulation scenario1 ###
 #=====================================================================================================================#
-### simulation parameters
-ep <- c(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.4, 0.6, 0.8, 1)  
-ed <- c(1.02,1.04,1.06)
-nd <- 10
-pred_method <- "ranger"
+### parameters
+population_effects <- c(0,0.05,0.1,0.15,0.2,0.25,0.4,0.6,0.8,1)  # population effect
+disease_effects <- c(1.02,1.04,1.06)                             # disease effect
+norm_methods <- readRDS("res_summ/norm_methods.rds")
+pred_method <- "rfr"
 
-### combine the prediction results in "E:/USC/normalization/20230419_sim_crc_ranger_gpu/"
-sim_pred <- data.frame(alpha=NA,ed=NA,nd=NA,norm_method=NA,pred_method=NA,auc_value=NA)
-sim_pred <- sim_pred[-1,]
-# results with normal ep
-for(i in ed){
-  for(j in norm_methods$norm_method){
-    pred_res_file <- paste0("./sim_data_pred/auc_nd",nd,"_ed",i,"_",j,"_",pred_method,".rds")
-    pred_res <- readRDS(pred_res_file)
-    sim_pred <- rbind(sim_pred,pred_res)
-  }
-}
-# save the results
-saveRDS(sim_pred,"data/sim_pred.rds")
-
-### compute the average auc value for different combinations
-sim_pred_summ <- data.frame(alpha=NA,ed=NA,nd=NA,pred_method=NA,norm_method=NA,average_auc=NA)
-sim_pred_summ <- sim_pred_summ[-1,]
-for(i in unique(sim_pred$alpha)){
-  for(j in unique(sim_pred$ed)){
-    for(k in unique(sim_pred$norm_method)){
-      data <- sim_pred[sim_pred$alpha==i & sim_pred$ed==j & sim_pred$norm_method==k, ]
-      df <- data.frame(alpha=i,ed=j,nd=nd,pred_method=pred_method,norm_method=k,
-                       average_auc=round(mean(as.numeric(data$auc_value)),5))
-      sim_pred_summ <- rbind(sim_pred_summ,df)
+### prediction results
+scenario1_df <- data.frame(ep=numeric(0),ed=numeric(0),norm_method=character(0),pred_method=character(0),auc=numeric(0))
+scenario1_summ_df <- data.frame(ep=numeric(0),ed=numeric(0),norm_method=character(0),pred_method=character(0),average_auc=numeric(0))
+for(alpha in population_effects){
+  for(disease_effect in disease_effects){
+    for(norm_method in norm_methods$norm_method){
+      #alpha=0;disease_effect=1.02;norm_method="TSS"
+      df <- readRDS(paste0("scenario1/pred_results/",norm_method,"/norm_alpha",alpha,"_ed",disease_effect,"_",norm_method,"_",pred_method,".rds"))
+      summ_df <- data.frame(ep=alpha,ed=disease_effect,norm_method=norm_method,pred_method=pred_method,
+                            average_auc=round(mean(as.numeric(df$auc_value)),3))
+      scenario1_df <- rbind(scenario1_df,df)
+      scenario1_summ_df <- rbind(scenario1_summ_df,summ_df)
     }
   }
 }
+saveRDS(scenario1_df,"res_summ/scenario1_res.rds")
+saveRDS(scenario1_summ_df,"res_summ/scenario1_res_summ.rds")
 
-### add the orders of auc_values
-final_data <- data.frame(alpha=NA,ed=NA,nd=NA,pred_method=NA,norm_method=NA,average_auc=NA,order_average_auc=NA)
-final_data <- final_data[-1,]
-for(i in unique(sim_pred_summ$alpha)){
-  for(j in unique(sim_pred_summ$ed)){
-    # i=0;j=1.025
-    data <- sim_pred_summ[sim_pred_summ$alpha==i & sim_pred_summ$ed==j,]
-    # orders for average auc
-    data <- data[order(data$average_auc,decreasing=T),]
-    data$order_average_auc <- 1:nrow(data)
-    # final data
-    final_data <- rbind(final_data,data)
+
+#=====================================================================================================================#
+### simulation scenario2 ###
+#=====================================================================================================================#
+### parameters
+parameters <- list(c(0,1),c(500,1),c(1000,1),c(0,2),c(0,4))
+disease_effects <- c(1.02,1.04,1.06)
+norm_methods <- readRDS("res_summ/norm_methods.rds")
+pred_method <- "rfr"
+
+### prediction results
+scenario2_df <- data.frame(ed=numeric(0),batch_mean=numeric(0),batch_var=numeric(0),
+                           norm_method=character(0),pred_method=character(0),auc=numeric(0))
+scenario2_summ_df <- data.frame(ed=numeric(0),batch_mean=numeric(0),batch_var=numeric(0),
+                                norm_method=character(0),pred_method=character(0),average_auc=numeric(0))
+for(i in 1:length(parameters)){
+  for(disease_effect in disease_effects){
+    for(norm_method in norm_methods$norm_method){
+      #alpha=0;disease_effect=1.02;norm_method="TSS"
+      df <- readRDS(paste0("scenario2/pred_results/",norm_method,"/pred_ed",disease_effect,"_mean",parameters[[i]][1],"_var",parameters[[i]][2],"_",norm_method,"_",pred_method,".rds"))
+      summ_df <- data.frame(ed=disease_effect,batch_mean=parameters[[i]][1],batch_var=parameters[[i]][2],
+                            norm_method=norm_method,pred_method=pred_method,average_auc=round(mean(as.numeric(df$auc_value)),3))
+      scenario2_df <- rbind(scenario2_df,df)
+      scenario2_summ_df <- rbind(scenario2_summ_df,summ_df)
+    }
   }
 }
-saveRDS(final_data,"data/sim_pred_summ.rds")
+saveRDS(scenario2_df,"res_summ/scenario2_res.rds")
+saveRDS(scenario2_summ_df,"res_summ/scenario2_res_summ.rds")
+
+
+#=====================================================================================================================#
+### simulation scenario3 ###
+#=====================================================================================================================#
+### parameters
+overlaps <- c(2,4,6,8,10)
+disease_effects <- c(1.02,1.04,1.06)
+norm_methods <- readRDS("res_summ/norm_methods.rds")
+pred_method <- "rfr"
+
+### prediction results
+scenario3_df <- data.frame(ed=numeric(0),overlap=character(0),norm_method=character(0),pred_method=character(0),auc=numeric(0))
+scenario3_summ_df <- data.frame(ed=numeric(0),overlap=character(0),norm_method=character(0),pred_method=character(0),average_auc=numeric(0))
+for(overlap in overlaps){
+  for(disease_effect in disease_effects){
+    for(norm_method in norm_methods$norm_method){
+      df <- readRDS(paste0("scenario3/pred_results/",norm_method,"/pred_ed",disease_effect,"_overlap",overlap,"_",norm_method,"_",pred_method,".rds"))
+      summ_df <- data.frame(ed=disease_effect,overlap=overlap,norm_method=norm_method,pred_method=pred_method,
+                            average_auc=round(mean(as.numeric(df$auc_value)),3))
+      scenario3_df <- rbind(scenario3_df,df)
+      scenario3_summ_df <- rbind(scenario3_summ_df,summ_df)
+    }
+  }
+}
+saveRDS(scenario3_df,"res_summ/scenario3_res.rds")
+saveRDS(scenario3_summ_df,"res_summ/scenario3_res_summ.rds")
 
 
 #=====================================================================================================================#
