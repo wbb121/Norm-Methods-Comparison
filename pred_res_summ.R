@@ -34,7 +34,7 @@ saveRDS(norm_methods,"data/norm_methods.rds")
 ### parameters
 population_effects <- c(0,0.05,0.1,0.15,0.2,0.25,0.4,0.6,0.8,1)  # population effect
 disease_effects <- c(1.02,1.04,1.06)                             # disease effect
-norm_methods <- readRDS("res_summ/norm_methods.rds")
+norm_methods <- readRDS("data/norm_methods.rds")
 pred_method <- "rfr"
 
 ### prediction results
@@ -62,7 +62,7 @@ saveRDS(scenario1_summ_df,"data/scenario1_res_summ.rds")
 ### parameters
 parameters <- list(c(0,1),c(500,1),c(1000,1),c(0,2),c(0,4))
 disease_effects <- c(1.02,1.04,1.06)
-norm_methods <- readRDS("res_summ/norm_methods.rds")
+norm_methods <- readRDS("data/norm_methods.rds")
 pred_method <- "rfr"
 
 ### prediction results
@@ -92,7 +92,7 @@ saveRDS(scenario2_summ_df,"data/scenario2_res_summ.rds")
 ### parameters
 overlaps <- c(2,4,6,8,10)
 disease_effects <- c(1.02,1.04,1.06)
-norm_methods <- readRDS("res_summ/norm_methods.rds")
+norm_methods <- readRDS("data/norm_methods.rds")
 pred_method <- "rfr"
 
 ### prediction results
