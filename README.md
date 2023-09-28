@@ -10,26 +10,56 @@ Including functions to merge count tables, obtain count tables from curatedMetag
 
 Obtain metadata and count tables of datasets related to CRC (colorectal cancer) and IBD (inflammatory bowel disease) from curatedMetagenomicData.
 
-### [sim_data_analysis.R](https://github.com/wbb121/Norm-Methods-Comparison/blob/main/sim_data_analysis.R)：
+### [sim_scenario1.R](https://github.com/wbb121/Norm-Methods-Comparison/blob/main/sim_scenario1.R)：
 
-Validate the performance of different normalization methods on binary phenotype prediction in simulated datasets.
+Validate the performance of different normalization methods on binary phenotype prediction in simulation scenario 1.
 
 Use the following command to run the script:
 
 ```shell
-Rscript sim_data_analysis.R sim_cluster ed ns ls nd population1 population2 norm_cluster norm_method pred_cluster pred_method
+Rscript sim_scenario1.R sample_size library_size num_genes count1 count2 norm_method pred_method
 ```
 
-+ **sim_cluster**: number of clusters to do the simulation
-+ **ed**: disease effect
-+ **ns**: sample size of one simulated dataset
-+ **ls**: library size of each sample
-+ **nd**: number of disease related genes
-+ **population1**: simulation template 1
-+ **population2**: simulation template 2
-+ **norm_cluster**: number of clusters to do the normalization
++ **sample_size**: sample size of one simulated dataset
++ **library_size**: library size of each sample
++ **num_genes**: number of disease related genes
++ **count1**: simulation template 1
++ **count2**: simulation template 2
 + **norm_method**: normalization method
-+ **pred_cluster**: number of clusters to do the prediction
++ **pred_method**: prediction method
+
+### [sim_scenario2.R](https://github.com/wbb121/Norm-Methods-Comparison/blob/main/sim_scenario2.R)：
+
+Validate the performance of different normalization methods on binary phenotype prediction in simulation scenario 2.
+
+Use the following command to run the script:
+
+```shell
+Rscript sim_scenario2.R sample_size library_size num_genes count norm_method pred_method
+```
+
++ **sample_size**: sample size of one simulated dataset
++ **library_size**: library size of each sample
++ **num_genes**: number of disease related genes
++ **count**: simulation template 
++ **norm_method**: normalization method
++ **pred_method**: prediction method
+
+### [sim_scenario3.R](https://github.com/wbb121/Norm-Methods-Comparison/blob/main/sim_scenario3.R)：
+
+Validate the performance of different normalization methods on binary phenotype prediction in simulation scenario 3.
+
+Use the following command to run the script:
+
+```shell
+Rscript sim_scenario3.R sample_size library_size num_genes count norm_method pred_method
+```
+
++ **sample_size**: sample size of one simulated dataset
++ **library_size**: library size of each sample
++ **num_genes**: number of disease related genes
++ **count**: simulation template 
++ **norm_method**: normalization method
 + **pred_method**: prediction method
 
 ### [real_data_analysis.R](https://github.com/wbb121/Norm-Methods-Comparison/blob/main/real_data_analysis.R):
