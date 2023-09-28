@@ -1,6 +1,6 @@
 ######################################################################################################################
-### figures for normalization methods comparison in binary phenotype prediction 
-### 2023/09/20
+### figures
+### 2023/09/28
 ######################################################################################################################
 
 setwd("/home/wangbb/normalization_comparison")
@@ -8,7 +8,6 @@ setwd("/home/wangbb/normalization_comparison")
 ### packages
 all(sapply(c("vegan","ape","reshape2","ggplot2","ggtree","viridis","RColorBrewer","ggsci","aplot","ggpubr",
              "grid","ggplotify","patchwork"),require, character.only=TRUE))
-#load("new_figures.RData")
 
 #======================================================================================================================#
 ### function for merging two count table
