@@ -3,7 +3,7 @@
 ### 2023/06/05
 ########################################################################################################################
 
-setwd("/home/wangbb/normalization/simulation")
+setwd("/home/wangbb/normalization_comparison")
 
 ### packages
 library(curatedMetagenomicData)
