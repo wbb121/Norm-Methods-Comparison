@@ -1,6 +1,6 @@
 ########################################################################################################################
 ### helper for the comparsions of normalization methods for metagenomic cross-study phenotype prediction
-### 2023/06/05
+### 2023/09/28
 ########################################################################################################################
 
 
@@ -236,10 +236,14 @@ norm.func <- function(p1,p2,norm_method){
     }
     # GMPR normalization
     norm_p1 <- gmpr.func(p1)
-    norm_p2 <- gmpr.func(merge.func(p1,p2))[rownames(p1),colnames(p2)]
+    norm_p2 <- gmpr.func(p2)
+    #norm_p2 <- gmpr.func(merge.func(p1,p2))[rownames(p1),colnames(p2)]
     # let p2 have the same genes as p1 
-    final_p1 <- norm_p1
-    final_p2 <- norm_p2
+    #final_p1 <- norm_p1
+    #final_p2 <- norm_p2
+    merged <- merge.func(norm_p1,norm_p2)
+    final_p1 <- merged[rownames(norm_p1),colnames(norm_p1)]
+    final_p2 <- merged[rownames(norm_p1),colnames(norm_p2)]
   }
   
   # CLR+, for samples
@@ -404,8 +408,8 @@ norm.func <- function(p1,p2,norm_method){
     p1[p1==0] <- 1
     p2[p2==0] <- 1
     # VST transformation
-    trans_p1 <- as.data.frame(varianceStabilizingTransformation(as.matrix(p1)))
-    trans_p2 <- as.data.frame(varianceStabilizingTransformation(as.matrix(merge.func(p1,p2))))[,colnames(p2)]
+    trans_p1 <- as.data.frame(varianceStabilizingTransformation(as.matrix(p1),blind=FALSE,fitType="mean"))
+    trans_p2 <- as.data.frame(varianceStabilizingTransformation(as.matrix(merge.func(p1,p2)),blind=FALSE,fitType="mean"))[,colnames(p2)]
     # let p2 have the same genes as p1 
     final_p1 <- trans_p1
     final_p2 <- trans_p2[rownames(trans_p1),]
@@ -546,7 +550,7 @@ norm.func <- function(p1,p2,norm_method){
   
   # conqur_trn, batch correction
   # directly worked on the count table, using training as reference
-  if(norm_method=="conqur_trn"){
+  if(norm_method=="conqur"){
     require(ConQuR)
     require(foreach)
     merged <- merge.func(p1,p2)
