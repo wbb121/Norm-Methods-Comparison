@@ -151,6 +151,7 @@ for(disease_effect in disease_effects){
   saveRDS(sim_tabs,paste0("scenario2/sim_data/sim_ed",disease_effect,".rds"))
   print(paste0("disease_effect=",disease_effect))
 }
+# After generating simulation data, comment out the simulation part so that data will not be generated repeatedly.
 
 
 # simulate the batch effect
