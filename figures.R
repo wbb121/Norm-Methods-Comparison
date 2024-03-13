@@ -184,8 +184,9 @@ margins <- ggplot(norm_methods,aes("",annotated_method,fill=class))+
   theme(axis.text.y=element_blank())
 margins
 
-### heatmap
-heatmap.scenario1.func <- function(df_data,ed,title){
+
+### heatmap for auc 
+heatmap.auc.scenario1.func <- function(df_data,ed,title){
   # heatmaps
   df_data <- df_data[df_data$ed==ed,]
   df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
@@ -194,18 +195,92 @@ heatmap.scenario1.func <- function(df_data,ed,title){
     geom_tile() +
     geom_text(aes(x=ep, y=annotated_method, label=average_auc), color="black", size=4)+
     labs(x="population effect",y="",fill="Average\nAUC",title=title)+
-    scale_fill_distiller(palette="Reds",limits=c(0.4,1),direction=1)+
+    scale_fill_distiller(palette="Reds",limits=c(0.48,1),direction=1)+
     theme_bw()+
     theme(panel.grid.minor=element_blank(), panel.border=element_blank())
   heatmaps
 }
-p1 <- heatmap.scenario1.func(df_data=scenario1_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
-p2 <- heatmap.scenario1.func(df_data=scenario1_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
-p3 <- heatmap.scenario1.func(df_data=scenario1_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 <- heatmap.auc.scenario1.func(df_data=scenario1_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.auc.scenario1.func(df_data=scenario1_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.auc.scenario1.func(df_data=scenario1_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
 p1 %>% insert_left(margins,width=0.05) %>% 
   insert_right(p2, width=1) %>%
   insert_right(p3,width=1)
-ggsave("sim_scenario1.jpg",width=18,height=6,dpi=300)
+ggsave("figures/sim_scenario1_auc.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for accuracy
+heatmap.accuracy.scenario1.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_accuracy <- round(df_data$average_accuracy,3)
+  heatmaps <- ggplot(df_data, aes(x=ep, y=annotated_method, fill=average_accuracy))+ 
+    geom_tile() +
+    geom_text(aes(x=ep, y=annotated_method, label=average_accuracy), color="black", size=4)+
+    labs(x="population effect",y="",fill="Average\naccuracy",title=title)+
+    scale_fill_distiller(palette="Purples",limits=c(0.49,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.accuracy.scenario1.func(df_data=scenario1_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.accuracy.scenario1.func(df_data=scenario1_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.accuracy.scenario1.func(df_data=scenario1_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario1_accuracy.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for specificity
+heatmap.specificity.scenario1.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_specificity <- round(df_data$average_specificity,3)
+  heatmaps <- ggplot(df_data, aes(x=ep, y=annotated_method, fill=average_specificity))+ 
+    geom_tile() +
+    geom_text(aes(x=ep, y=annotated_method, label=average_specificity), color="black", size=4)+
+    labs(x="population effect",y="",fill="Average\nspecificity",title=title)+
+    scale_fill_distiller(palette="Greens",limits=c(0,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.specificity.scenario1.func(df_data=scenario1_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.specificity.scenario1.func(df_data=scenario1_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.specificity.scenario1.func(df_data=scenario1_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario1_specificity.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for sensitivity
+heatmap.sensitivity.scenario1.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_sensitivity <- round(df_data$average_sensitivity,3)
+  heatmaps <- ggplot(df_data, aes(x=ep, y=annotated_method, fill=average_sensitivity))+ 
+    geom_tile() +
+    geom_text(aes(x=ep, y=annotated_method, label=average_sensitivity), color="black", size=4)+
+    labs(x="population effect",y="",fill="Average\nsensitivity",title=title)+
+    scale_fill_distiller(palette="Blues",limits=c(0,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.sensitivity.scenario1.func(df_data=scenario1_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.sensitivity.scenario1.func(df_data=scenario1_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.sensitivity.scenario1.func(df_data=scenario1_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario1_sensitivity.jpg",width=18,height=6,dpi=300)
+                                   
+
 
 
 #=====================================================================================================================#
@@ -227,8 +302,9 @@ margins <- ggplot(norm_methods,aes("",annotated_method,fill=class))+
   theme(axis.text.y=element_blank())
 margins
 
-### heatmap
-heatmap.scenario2.func <- function(df_data,ed,title){
+                                      
+### heatmap for auc
+heatmap.auc.scenario2.func <- function(df_data,ed,title){
   # heatmaps
   df_data <- df_data[df_data$ed==ed,]
   df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
@@ -237,18 +313,91 @@ heatmap.scenario2.func <- function(df_data,ed,title){
     geom_tile() +
     geom_text(aes(x=factor, y=annotated_method, label=average_auc), color="black", size=4)+
     labs(x="factor",y="",fill="Average\nAUC",title=title)+
-    scale_fill_distiller(palette="Reds",limits=c(0.4,1),direction=1)+
+    scale_fill_distiller(palette="Reds",limits=c(0.47,1),direction=1)+
     theme_bw()+
     theme(panel.grid.minor=element_blank(), panel.border=element_blank())
   heatmaps
 }
-p1 <- heatmap.scenario2.func(df_data=scenario2_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
-p2 <- heatmap.scenario2.func(df_data=scenario2_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
-p3 <- heatmap.scenario2.func(df_data=scenario2_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 <- heatmap.auc.scenario2.func(df_data=scenario2_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.auc.scenario2.func(df_data=scenario2_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.auc.scenario2.func(df_data=scenario2_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
 p1 %>% insert_left(margins,width=0.05) %>% 
   insert_right(p2, width=1) %>%
   insert_right(p3,width=1)
-ggsave("sim_scenario2.jpg",width=18,height=6,dpi=300)
+ggsave("figures/sim_scenario2_auc.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for accuracy
+heatmap.accuracy.scenario2.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_accuracy <- round(df_data$average_accuracy,3)
+  heatmaps <- ggplot(df_data, aes(x=factor, y=annotated_method, fill=average_accuracy))+ 
+    geom_tile() +
+    geom_text(aes(x=factor, y=annotated_method, label=average_accuracy), color="black", size=4)+
+    labs(x="factor",y="",fill="Average\naccuracy",title=title)+
+    scale_fill_distiller(palette="Purples",limits=c(0.47,0.88),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.accuracy.scenario2.func(df_data=scenario2_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.accuracy.scenario2.func(df_data=scenario2_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.accuracy.scenario2.func(df_data=scenario2_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario2_accuracy.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for specificity
+heatmap.specificity.scenario2.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_specificity <- round(df_data$average_specificity,3)
+  heatmaps <- ggplot(df_data, aes(x=factor, y=annotated_method, fill=average_specificity))+ 
+    geom_tile() +
+    geom_text(aes(x=factor, y=annotated_method, label=average_specificity), color="black", size=4)+
+    labs(x="factor",y="",fill="Average\nspecificity",title=title)+
+    scale_fill_distiller(palette="Greens",limits=c(0,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.specificity.scenario2.func(df_data=scenario2_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.specificity.scenario2.func(df_data=scenario2_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.specificity.scenario2.func(df_data=scenario2_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario2_specificity.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for sensitivity
+heatmap.sensitivity.scenario2.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_sensitivity <- round(df_data$average_sensitivity,3)
+  heatmaps <- ggplot(df_data, aes(x=factor, y=annotated_method, fill=average_sensitivity))+ 
+    geom_tile() +
+    geom_text(aes(x=factor, y=annotated_method, label=average_sensitivity), color="black", size=4)+
+    labs(x="factor",y="",fill="Average\nsensitivity",title=title)+
+    scale_fill_distiller(palette="Blues",limits=c(0,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.sensitivity.scenario2.func(df_data=scenario2_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.sensitivity.scenario2.func(df_data=scenario2_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.sensitivity.scenario2.func(df_data=scenario2_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario2_sensitivity.jpg",width=18,height=6,dpi=300)
+
 
 
 #=====================================================================================================================#
@@ -269,8 +418,9 @@ margins <- ggplot(norm_methods,aes("",annotated_method,fill=class))+
   theme(axis.text.y=element_blank())
 margins
 
-### heatmap
-heatmap.scenario3.func <- function(df_data,ed,title){
+
+### heatmap for auc
+heatmap.auc.scenario3.func <- function(df_data,ed,title){
   # heatmaps
   df_data <- df_data[df_data$ed==ed,]
   df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
@@ -284,15 +434,89 @@ heatmap.scenario3.func <- function(df_data,ed,title){
     theme(panel.grid.minor=element_blank(), panel.border=element_blank())
   heatmaps
 }
-p1 <- heatmap.scenario3.func(df_data=scenario3_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
-p2 <- heatmap.scenario3.func(df_data=scenario3_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
-p3 <- heatmap.scenario3.func(df_data=scenario3_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 <- heatmap.auc.scenario3.func(df_data=scenario3_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.auc.scenario3.func(df_data=scenario3_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.auc.scenario3.func(df_data=scenario3_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
 p1 %>% insert_left(margins,width=0.05) %>% 
   insert_right(p2, width=1) %>%
   insert_right(p3,width=1)
-ggsave("sim_scenario3.jpg",width=18,height=6,dpi=300)
+ggsave("figures/sim_scenario3_auc.jpg",width=18,height=6,dpi=300)
 
 
+### heatmap for accuracy
+heatmap.accuracy.scenario3.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_accuracy <- round(df_data$average_accuracy,3)
+  heatmaps <- ggplot(df_data, aes(x=overlap, y=annotated_method, fill=average_accuracy))+ 
+    geom_tile() +
+    geom_text(aes(x=overlap, y=annotated_method, label=average_accuracy), color="black", size=4)+
+    labs(x="overlap",y="",fill="Average\naccuracy",title=title)+
+    scale_fill_distiller(palette="Purples",limits=c(0.54,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.accuracy.scenario3.func(df_data=scenario3_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.accuracy.scenario3.func(df_data=scenario3_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.accuracy.scenario3.func(df_data=scenario3_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario3_accuracy.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for specificity
+heatmap.specificity.scenario3.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_accuracy <- round(df_data$average_specificity,3)
+  heatmaps <- ggplot(df_data, aes(x=overlap, y=annotated_method, fill=average_specificity))+ 
+    geom_tile() +
+    geom_text(aes(x=overlap, y=annotated_method, label=average_specificity), color="black", size=4)+
+    labs(x="overlap",y="",fill="Average\nspecificity",title=title)+
+    scale_fill_distiller(palette="Greens",limits=c(0.41,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.specificity.scenario3.func(df_data=scenario3_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.specificity.scenario3.func(df_data=scenario3_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.specificity.scenario3.func(df_data=scenario3_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario3_specificity.jpg",width=18,height=6,dpi=300)
+
+
+### heatmap for sensitivity
+heatmap.sensitivity.scenario3.func <- function(df_data,ed,title){
+  # heatmaps
+  df_data <- df_data[df_data$ed==ed,]
+  df_data <- df_data[df_data$norm_method%in%norm_methods$norm_method,]
+  df_data$average_accuracy <- round(df_data$average_sensitivity,3)
+  heatmaps <- ggplot(df_data, aes(x=overlap, y=annotated_method, fill=average_sensitivity))+ 
+    geom_tile() +
+    geom_text(aes(x=overlap, y=annotated_method, label=average_sensitivity), color="black", size=4)+
+    labs(x="overlap",y="",fill="Average\nsensitivity",title=title)+
+    scale_fill_distiller(palette="Blues",limits=c(0.41,1),direction=1)+
+    theme_bw()+
+    theme(panel.grid.minor=element_blank(), panel.border=element_blank())
+  heatmaps
+}
+p1 <- heatmap.sensitivity.scenario3.func(df_data=scenario3_summ,ed=1.02,title=expression(paste(bold("a")," ed = 1.02")))
+p2 <- heatmap.sensitivity.scenario3.func(df_data=scenario3_summ,ed=1.04,title=expression(paste(bold("b")," ed = 1.04")))+theme(axis.text.y=element_blank())
+p3 <- heatmap.sensitivity.scenario3.func(df_data=scenario3_summ,ed=1.06,title=expression(paste(bold("c")," ed = 1.06")))+theme(axis.text.y=element_blank())
+p1 %>% insert_left(margins,width=0.05) %>% 
+  insert_right(p2, width=1) %>%
+  insert_right(p3,width=1)
+ggsave("figures/sim_scenario3_sensitivity.jpg",width=18,height=6,dpi=300)
+
+
+
+                                      
 #=====================================================================================================================#
 ### CRC data ###
 #=====================================================================================================================#
@@ -306,57 +530,142 @@ crc_pred$study1 <- gsub("([A-Z][a-z]+)[A-Z]+_[0-9]+", "\\1", crc_pred$study1)
 crc_pred$study2 <- gsub("([A-Z][a-z]+)[A-Z]+_[0-9]+", "\\1", crc_pred$study2)
 crc_pred_summ$study1 <- gsub("([A-Z][a-z]+)[A-Z]+_[0-9]+", "\\1", crc_pred_summ$study1)
 crc_pred_summ$study2 <- gsub("([A-Z][a-z]+)[A-Z]+_[0-9]+", "\\1", crc_pred_summ$study2)
-
 ### combine the pred results and norm methods
 crc_pred <- merge(crc_pred,norm_methods,by="norm_method")
 crc_pred_summ <- merge(crc_pred_summ,norm_methods,by="norm_method")
-
-### box plot for auc values using different normalization method of different training and testing set
 # add the trn and tst information
-crc_pred$study1 <- paste("trn:",crc_pred$study1)
-crc_pred$study2 <- paste("tst:",crc_pred$study2)
-# plot 
-ggboxplot(crc_pred,x="annotated_method",y="auc_values",color="class")+
-  geom_hline(aes(yintercept=0.4), colour="grey", linetype="dashed")+
-  geom_hline(aes(yintercept=0.6), colour="grey", linetype="dashed")+
-  geom_hline(aes(yintercept=0.8), colour="grey", linetype="dashed")+
-  scale_color_jco()+
-  scale_y_continuous(limits=c(0.2,1), breaks=seq(0.4,1,0.2))+
-  labs(x="Normalization methods",y="AUC", color="Group of normalization methods")+
-  theme(panel.border=element_rect(fill=NA,color="black"))+
-  theme(axis.text.y=element_text(size=8))+
-  facet_grid(study1~study2,scales="free")+
-  coord_flip()
-ggsave("crc_pred_box.jpg",width=16,height=18,dpi=300)
+crc_pred$group <- paste0("trn:",crc_pred$study1,", tst:",crc_pred$study2)
+crc_pred_summ$group <- paste0("trn:",crc_pred_summ$study1,", tst:",crc_pred_summ$study2)
 
 
-### figure in the main text, 
-#   including the boxplot for auc values using the simulation template data, 
-#   and the boxplot for the rank of different normalization methods for CRC datasets
-# boxplot for auc values using trn: Gupta and tst: Feng
-box_auc_template <- ggboxplot(crc_pred[crc_pred$study1=="trn: Gupta" & crc_pred$study2=="tst: Feng",],
-                              x="annotated_method",y="auc_values",color="class")+
-  geom_hline(aes(yintercept=0.5), colour="grey", linetype="dashed")+
+#=====================================================================================================================#
+### box plot for auc values
+crc_pred_auc <- list()
+crc_groups <- unique(crc_pred$group)[order(unique(crc_pred$group))]
+for(i in 1:length(crc_groups)){
+  df <- crc_pred[crc_pred$group==crc_groups[i],]
+  crc_pred_auc[[i]] <- ggplot(df,aes(x=annotated_method,y=auc_value,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="AUC",title=crc_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=crc_pred_auc,nrow=8,ncol=7,labels=paste0(rep(letters[1:8],each=7),rep(1:7,8)),common.legend=T)
+ggsave("figures/crc_pred_auc.jpg",width=15,height=22,dpi=300)
+
+
+### box plot accuracy
+crc_pred_accuracy <- list()
+crc_groups <- unique(crc_pred$group)[order(unique(crc_pred$group))]
+for(i in 1:length(crc_groups)){
+  df <- crc_pred[crc_pred$group==crc_groups[i],]
+  crc_pred_accuracy[[i]] <- ggplot(df,aes(x=annotated_method,y=accuracy,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="accuracy",title=crc_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=crc_pred_accuracy,nrow=8,ncol=7,labels=paste0(rep(letters[1:8],each=7),rep(1:7,8)),common.legend=T)
+ggsave("figures/crc_pred_accuracy.jpg",width=15,height=22,dpi=300)
+
+
+### box plot specificity
+crc_pred_specificity <- list()
+crc_groups <- unique(crc_pred$group)[order(unique(crc_pred$group))]
+for(i in 1:length(crc_groups)){
+  df <- crc_pred[crc_pred$group==crc_groups[i],]
+  crc_pred_specificity[[i]] <- ggplot(df,aes(x=annotated_method,y=specificity,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="specificity",title=crc_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=crc_pred_specificity,nrow=8,ncol=7,labels=paste0(rep(letters[1:8],each=7),rep(1:7,8)),common.legend=T)
+ggsave("figures/crc_pred_specificity.jpg",width=15,height=22,dpi=300)
+
+
+### box plot sensitivity
+crc_pred_sensitivity <- list()
+crc_groups <- unique(crc_pred$group)[order(unique(crc_pred$group))]
+for(i in 1:length(crc_groups)){
+  df <- crc_pred[crc_pred$group==crc_groups[i],]
+  crc_pred_sensitivity[[i]] <- ggplot(df,aes(x=annotated_method,y=sensitivity,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="sensitivity",title=crc_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=crc_pred_sensitivity,nrow=8,ncol=7,labels=paste0(rep(letters[1:8],each=7),rep(1:7,8)),common.legend=T)
+ggsave("figures/crc_pred_sensitivity.jpg",width=15,height=22,dpi=300)
+                                    
+                                      
+#=====================================================================================================================#
+### box plot for the ranks of auc
+crc_ranks_auc <- ggboxplot(crc_pred_summ,x="annotated_method",y="order_auc",color="class")+
   scale_color_jco()+
-  labs(x="Normalization methods",y="AUC",color="Group of normalization methods",
-       title="AUC values of model trained on Gupta and tested on Feng")+
+  labs(x="Normalization methods",y="Ranks of AUC",color="Group of normalization methods",
+       title="CRC Datasets: AUC Ranking Across Normalization Methods")+
   theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
   theme(legend.position="bottom")
-box_auc_template
 
-# boxplot for the rank of different normalization methods
-box_crc_rank <- ggboxplot(crc_pred_summ,x="annotated_method",y="order_average_auc",color="class")+
+
+### box plot for the ranks of accuracy
+crc_ranks_accuracy <- ggboxplot(crc_pred_summ,x="annotated_method",y="order_accuracy",color="class")+
   scale_color_jco()+
-  labs(x="Normalization methods",y="Ranks",color="Group of normalization methods",
-       title="Ranks of normalizaton methods for CRC prediction")+
+  labs(x="Normalization methods",y="Ranks of accuracy",color="Group of normalization methods",
+       title="CRC Datasets: Accuracy Ranking Across Normalization Methods")+
   theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
   theme(legend.position="bottom")
-box_crc_rank
 
-# combine box_auc_template and box_crc_rank
-ggarrange(box_auc_template,box_crc_rank,ncol=1,labels=letters[1:2],common.legend=T)
-ggsave("crc_pred_res.jpg",width=10,height=5,dpi=300)
+                                      
+### box plot for the ranks of specificity
+crc_ranks_specificity <- ggboxplot(crc_pred_summ,x="annotated_method",y="order_specificity",color="class")+
+  scale_color_jco()+
+  labs(x="Normalization methods",y="Ranks of specificity",color="Group of normalization methods",
+       title="CRC Datasets: Specificity Ranking Across Normalization Methods")+
+  theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
+  theme(legend.position="bottom")
 
+                                      
+### box plot for the ranks of sensitivity
+crc_ranks_sensitivity <- ggboxplot(crc_pred_summ,x="annotated_method",y="order_sensitivity",color="class")+
+  scale_color_jco()+
+  labs(x="Normalization methods",y="Ranks of sensitivity",color="Group of normalization methods",
+       title="CRC Datasets: Sensitivity Ranking Across Normalization Methods")+
+  theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
+  theme(legend.position="bottom")
+
+
+ggarrange(crc_ranks_auc,crc_ranks_accuracy,crc_ranks_sensitivity,crc_ranks_specificity,
+          nrow=4,ncol=1,labels=letters[1:4],common.legend=T)
+ggsave("figures/crc_pred_ranks.jpg",width=10,height=12,dpi=300)  
+
+
+                                    
 
 #=====================================================================================================================#
 ### prediction results for IBD datasets ###
@@ -376,36 +685,141 @@ ibd_pred$study1 <- sub("HMP_2019_ibdmdb","HMP",ibd_pred$study1)
 ibd_pred$study2 <- sub("HMP_2019_ibdmdb","HMP",ibd_pred$study2)
 ibd_pred_summ$study1 <- sub("HMP_2019_ibdmdb","HMP",ibd_pred_summ$study1)
 ibd_pred_summ$study2 <- sub("HMP_2019_ibdmdb","HMP",ibd_pred_summ$study2)
-
 ### combine the pred results and norm methods
 ibd_pred <- merge(ibd_pred,norm_methods,by="norm_method")
 ibd_pred_summ <- merge(ibd_pred_summ,norm_methods,by="norm_method")
-
-### box plot for auc values using different normalization method of different training and testing set
 # add the trn and tst information
-ibd_pred$study1 <- paste("trn:",ibd_pred$study1)
-ibd_pred$study2 <- paste("tst:",ibd_pred$study2)
-# plot 
-ggboxplot(ibd_pred,x="annotated_method",y="auc_values",color="class")+
-  geom_hline(aes(yintercept=0.5), colour="grey", linetype="dashed")+
-  scale_color_jco()+
-  scale_y_continuous(limits=c(0.2,1), breaks=seq(0.4,1,0.2))+
-  labs(x="Normalization methods",y="AUC", color="Group of normalization methods")+
-  theme(panel.border=element_rect(fill=NA,color="black"))+
-  theme(axis.text.y=element_text(size=8))+
-  facet_grid(study1~study2,scales="free")+
-  coord_flip()
-ggsave("ibd_pred_box.jpg",width=10,height=12,dpi=300)
+ibd_pred$group <- paste0("trn:",ibd_pred$study1,", tst:",ibd_pred$study2)
+ibd_pred_summ$group <- paste0("trn:",ibd_pred_summ$study1,", tst:",ibd_pred_summ$study2)
 
-### boxplot for the rank of different normalization methods
-ggboxplot(ibd_pred_summ,x="annotated_method",y="order_average_auc",color="class")+
+                                      
+#=====================================================================================================================#
+### box plot for auc values
+ibd_pred_auc <- list()
+ibd_groups <- unique(ibd_pred$group)[order(unique(ibd_pred$group))]
+for(i in 1:length(ibd_groups)){
+  df <- ibd_pred[ibd_pred$group==ibd_groups[i],]
+  ibd_pred_auc[[i]] <- ggplot(df,aes(x=annotated_method,y=auc_value,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="AUC",title=ibd_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=ibd_pred_auc,nrow=5,ncol=4,labels=paste0(rep(letters[1:5],each=4),rep(1:4,5)),common.legend=T)
+ggsave("figures/ibd_pred_auc.jpg",width=10,height=14,dpi=300)
+
+
+### box plot accuracy
+ibd_pred_accuracy <- list()
+ibd_groups <- unique(ibd_pred$group)[order(unique(ibd_pred$group))]
+for(i in 1:length(ibd_groups)){
+  df <- ibd_pred[ibd_pred$group==ibd_groups[i],]
+  ibd_pred_accuracy[[i]] <- ggplot(df,aes(x=annotated_method,y=accuracy,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="accuracy",title=ibd_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=ibd_pred_accuracy,nrow=5,ncol=4,labels=paste0(rep(letters[1:5],each=4),rep(1:4,5)),common.legend=T)
+ggsave("figures/ibd_pred_accuracy.jpg",width=10,height=14,dpi=300)
+
+
+### box plot specificity
+ibd_pred_specificity <- list()
+ibd_groups <- unique(ibd_pred$group)[order(unique(ibd_pred$group))]
+for(i in 1:length(ibd_groups)){
+  df <- ibd_pred[ibd_pred$group==ibd_groups[i],]
+  ibd_pred_specificity[[i]] <- ggplot(df,aes(x=annotated_method,y=specificity,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="specificity",title=ibd_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=ibd_pred_specificity,nrow=5,ncol=4,labels=paste0(rep(letters[1:5],each=4),rep(1:4,5)),common.legend=T)
+ggsave("figures/ibd_pred_specificity.jpg",width=10,height=14,dpi=300)
+
+                                      
+
+### box plot sensitivity
+ibd_pred_sensitivity <- list()
+ibd_groups <- unique(ibd_pred$group)[order(unique(ibd_pred$group))]
+for(i in 1:length(ibd_groups)){
+  df <- ibd_pred[ibd_pred$group==ibd_groups[i],]
+  ibd_pred_sensitivity[[i]] <- ggplot(df,aes(x=annotated_method,y=sensitivity,color=class))+
+    geom_boxplot()+
+    scale_color_jco()+
+    labs(x="Normalization methods",y="sensitivity",title=ibd_groups[i],color="Group of normalization methods")+
+    theme_bw()+
+    theme(plot.title=element_text(size=9))+
+    theme(axis.text.x=element_text(size=7),axis.text.y=element_text(size=7))+
+    theme(axis.title.x=element_text(size=7),axis.title.y=element_text(size=7))+
+    theme(panel.grid.minor=element_blank())+
+    theme(panel.border=element_rect(fill=NA,color="black"))+
+    coord_flip()
+}
+ggarrange(plotlist=ibd_pred_sensitivity,nrow=5,ncol=4,labels=paste0(rep(letters[1:5],each=4),rep(1:4,5)),common.legend=T)
+ggsave("figures/ibd_pred_sensitivity.jpg",width=10,height=14,dpi=300)
+                                      
+
+
+#=====================================================================================================================#
+### box plot for the ranks of auc
+ibd_ranks_auc <- ggboxplot(ibd_pred_summ,x="annotated_method",y="order_auc",color="class")+
   scale_color_jco()+
-  labs(x="Normalization methods",y="Ranks",color="Group of normalization methods")+
-  #title="Ranks of normalizaton methods for IBD prediction")+
+  labs(x="Normalization methods",y="Ranks of AUC",color="Group of normalization methods",
+       title="IBD Datasets: AUC Ranking Across Normalization Methods")+
   theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
-  theme(legend.position="top")
-ggsave("ibd_pred_rank.jpg",width=10,height=3,dpi=300)
+  theme(legend.position="bottom")
 
+
+### box plot for the ranks of accuracy
+ibd_ranks_accuracy <- ggboxplot(ibd_pred_summ,x="annotated_method",y="order_accuracy",color="class")+
+  scale_color_jco()+
+  labs(x="Normalization methods",y="Ranks of accuracy",color="Group of normalization methods",
+       title="IBD Datasets: Accuracy Ranking Across Normalization Methods")+
+  theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
+  theme(legend.position="bottom")
+
+
+### box plot for the ranks of specificity
+ibd_ranks_specificity <- ggboxplot(ibd_pred_summ,x="annotated_method",y="order_specificity",color="class")+
+  scale_color_jco()+
+  labs(x="Normalization methods",y="Ranks of specificity",color="Group of normalization methods",
+       title="IBD Datasets: Specificity Ranking Across Normalization Methods")+
+  theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
+  theme(legend.position="bottom")
+
+
+### box plot for the ranks of sensitivity
+ibd_ranks_sensitivity <- ggboxplot(ibd_pred_summ,x="annotated_method",y="order_sensitivity",color="class")+
+  scale_color_jco()+
+  labs(x="Normalization methods",y="Ranks of sensitivity",color="Group of normalization methods",
+       title="IBD Datasets: Sensitivity Ranking Across Normalization Methods")+
+  theme(axis.text.x=element_text(vjust=0.5,hjust=1,angle=90))+
+  theme(legend.position="bottom")
+
+
+ggarrange(ibd_ranks_auc,ibd_ranks_accuracy,ibd_ranks_sensitivity,ibd_ranks_specificity,
+          nrow=4,ncol=1,labels=letters[1:4],common.legend=T)
+ggsave("figures/ibd_pred_ranks.jpg",width=10,height=12,dpi=300)
 
 
 
