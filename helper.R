@@ -632,7 +632,7 @@ sim.pred.func  <- function(trn,tst,pred_method){
   #}
   
   # return
-  return(auc_value)
+  return(c(auc_value,accuracy,sensitivity,specificity))
 }
 
 
@@ -702,7 +702,7 @@ pred.func  <- function(trn,tst,meta,pred_method){
   #}
   
   # return
-  return(auc_value)
+  return(c(auc_value,accuracy,sensitivity,specificity))
   
 }
 
