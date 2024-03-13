@@ -598,7 +598,17 @@ sim.pred.func  <- function(trn,tst,pred_method){
     rf <- train(status~., data=pred_trn, method="ranger", num.trees=1000, metric="ROC",trControl=ctrl)
     rf_pred <- predict(rf, pred_tst, type="prob")
     rf_pred$real <- gsub("p2_([a-z]+)_[0-9]+","\\1",rownames(pred_tst))
+    # AUC
     auc_value <- roc(rf_pred$real,rf_pred$control,levels=c("control", "case"), direction=">")$auc
+    # confusion matrix
+    TN <- sum(rf_pred$real=="ctrl"&rf_pred$pred=="ctrl")  # True Negatives
+    FP <- sum(rf_pred$real=="ctrl"&rf_pred$pred=="case")  # False Positives
+    FN <- sum(rf_pred$real=="case"&rf_pred$pred=="ctrl")  # False Negatives
+    TP <- sum(rf_pred$real=="case"&rf_pred$pred=="case")  # True Positives
+    # accuracy, sensitivity, and specificity
+    accuracy <- (TN+TP)/sum(TN+FP+FN+TP)
+    sensitivity <- TP/(TP+FN)
+    specificity <- TN/(TN+FP)
   }
   
   #### lasso (logistic regression)
@@ -658,7 +668,17 @@ pred.func  <- function(trn,tst,meta,pred_method){
     rf <- train(status~., data=pred_trn, method="ranger", num.trees=1000, metric="ROC",trControl=ctrl)
     rf_pred <- predict(rf, pred_tst, type="prob")
     rf_pred$real <- meta[rownames(pred_tst),"phenotype"]
+    # AUC
     auc_value <- roc(rf_pred$real,rf_pred$control,levels=c("control", "case"), direction=">")$auc
+    # confusion matrix
+    TN <- sum(rf_pred$real=="ctrl"&rf_pred$pred=="ctrl")  # True Negatives
+    FP <- sum(rf_pred$real=="ctrl"&rf_pred$pred=="case")  # False Positives
+    FN <- sum(rf_pred$real=="case"&rf_pred$pred=="ctrl")  # False Negatives
+    TP <- sum(rf_pred$real=="case"&rf_pred$pred=="case")  # True Positives
+    # accuracy, sensitivity, and specificity
+    accuracy <- (TN+TP)/sum(TN+FP+FN+TP)
+    sensitivity <- TP/(TP+FN)
+    specificity <- TN/(TN+FP)
   }
   
   #### lasso (logistic regression)
